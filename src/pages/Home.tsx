@@ -30,7 +30,7 @@ const Home = () => {
             GitHub User Profile Analyzer
           </div>
         </div>
-
+        <div className="text-red-700 pb-2 flex justify-center">Please wait 1 minute for commit data on chart to reflect.</div>
         <CardContent className="space-y-8 p-6 sm:p-8">
           {/* Input section */}
           <div className="flex flex-col sm:flex-row gap-3">
