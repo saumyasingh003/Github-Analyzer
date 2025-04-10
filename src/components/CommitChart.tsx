@@ -1,4 +1,5 @@
-  import { useEffect, useState } from "react";
+  import axios from "axios";
+import { useEffect, useState } from "react";
   import {
     BarChart,
     Bar,
@@ -30,21 +31,21 @@
     const [error, setError] = useState<string | null>(null);
 
     // Helper function: fetch with retry for 202 responses (data not ready yet)
-    const fetchCommitStatsWithRetry = async (url: string, headers: any, retries = 3) => {
-      for (let i = 0; i < retries; i++) {
-        const res = await fetch(url, { headers });
-        if (res.status === 202) {
-          await new Promise((r) => setTimeout(r, 1500));
-        } else {
-          try {
-            return await res.json();
-          } catch {
-            return [];
-          }
-        }
-      }
-      return [];
-    };
+    // const fetchCommitStatsWithRetry = async (url: string, headers: any, retries = 3) => {
+    //   for (let i = 0; i < retries; i++) {
+    //     const res = await fetch(url, { headers });
+    //     if (res.status === 202) {
+    //       await new Promise((r) => setTimeout(r, 1500));
+    //     } else {
+    //       try {
+    //         return await res.json();
+    //       } catch {
+    //         return [];
+    //       }
+    //     }
+    //   }
+    //   return [];
+    // };
 
     useEffect(() => {
       const fetchCommits = async () => {
@@ -93,9 +94,12 @@
             });
 
             // Fetch commit activity stats for this repository
-            const stats = await fetchCommitStatsWithRetry(
+            const stats = await axios.get(
               `https://api.github.com/repos/${username}/${repo.name}/stats/commit_activity`,
-              headers
+              {
+
+                headers
+              }
             );
             // Use the latest week data (which is now the current week) only
             if (Array.isArray(stats) && stats.length > 0) {
